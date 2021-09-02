@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Truprogram.Controllers
+@{
+    Layout = null;
+}
+@model Truprogram.Models.UserValidation
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/reset.css">
+    <link rel="stylesheet" href="~/css/reg_and_log_st.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="~/img/icon.ico" type="image/x-icon">
+    <title>program</title>
+</head>
+
+<body>
+    <a href="@Context.Session.GetString("BackUrl")">
+        <div class="back">
+            <img id="o" src="~/img/back.svg" alt="back" width="30px">
+            <img id="d" src="~/img/back_mini.svg" alt="back" width="40px">
+        </div>
+    </a>
+    <form asp-action="Register" asp-controller="User">
+
+        <label>Ваше имя</label>
+        <input asp-for="Name" oninput="nameFun(this)" type="text" placeholder="Например Иван" />
+        <span asp-validation-for="Name"></span>
+
+        <label>Ваш Email</label>
+        <input asp-for="Email" oninput="emailFun(this)" placeholder="example@mail.ru" />
+        <span asp-validation-for="Email"></span>
+
+
+        <label>Ваш пароль</label>
+        <input asp-for="Password" readonly onblur="remove()" onfocus="tooltip(this)" data-tooltip="Должен содержать минимум:<br>- одну латинскую букву<br>- одну заглавную букву<br>- одну цифру<br>быть длиннее 6 сиволов" oninput="acept_pasFun(this)" type="password" placeholder="Введите пароль" />
+        <span asp-validation-for="Password"></span>
+
+
+        <label>Подтверждение пароля</label>
+        <input asp-for="PasswordConfirm" readonly onfocus="this.removeAttribute('readonly')" oninput="acept_pas2Fun(this)" type="password" placeholder="Подтвердите пароль" />
+        <span asp-validation-for="PasswordConfirm"></span>
+
+
+        <label>Кто вы?</label>
+        <div class="radio_b">
+            <label><input asp-for="Role" class="radio_bb" type="radio" value="1" /> Лектор</label>
+            <label><input asp-for="Role" class="radio_bb" type="radio" value="0" /> Слушатель</label>
+        </div>
+        <span asp-validation-for="Role"></span>
+
+
+        <button type="submit">Зарегистрироваться</button>
+        <p>
+            Есть аккаунт? - <a href="~/User/Login">авторизируйтесь</a>!
+        </p>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="~/js/reg.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+
+    </form>
+</body>
+
+</html>

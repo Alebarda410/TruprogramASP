@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/reset.css">
+    <link rel="stylesheet" href="~/css/reg_and_log_st.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="~/img/icon.ico" type="image/x-icon">
+    <title>program</title>
+</head>
+
+<body>
+    <a href="@Context.Session.GetString("BackUrl")">
+        <div class="back">
+            <img id="o" src="~/img/back.svg" alt="back" width="30px">
+            <img id="d" src="~/img/back_mini.svg" alt="back" width="40px">
+        </div>
+    </a>
+    <form>
+
+        <label>Ваш Email</label>
+        <input maxlength="50" type="email" name="email" placeholder="Введите email" required>
+
+        <label>Ваш Пароль</label>
+        <input maxlength="50" type="password" name="password" placeholder="Введите пароль" required>
+
+        <button type="submit">Войти</button>
+        <p color>
+            Нет аккаунта? - <a href="~/User/Register">зарегистрируйтесь</a>!
+        </p>
+
+        <div class="msg"></div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            $('form').submit(function (event) {
+                event.preventDefault();
+                $.post('/User/Login', $('form').serialize(),
+                    function (data) {
+                        if (data === '1') {
+                            document.location.href = "@Context.Session.GetString("BackUrl")";
+                        } else {
+                            $('.msg').html(data);
+                            $('form').css('padding-bottom', '33px');
+                        }
+                    }
+                );
+            });
+        </script>
+    </form>
+</body>
+
+</html>

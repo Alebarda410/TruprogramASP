@@ -1,0 +1,87 @@
+﻿@using Microsoft.AspNetCore.Http
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/reset.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/@ViewBag.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="~/img/icon.ico" type="image/x-icon">
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <header>
+        <div class="hed_wraper">
+            <nav class="header_nav">
+                <a class="logo" href="/">
+                    <img src="~/img/logo.svg" alt="TRUprogram">
+                </a>
+                <ul class="header_list">
+                    <li class="list_item"><a href="/">Главная</a></li>
+                    <li class="list_item"><a href="~/Course/ListCourses">Курсы</a></li>
+                    <li class="list_item"><a href="~/OtherPages/Contact">Контакты</a></li>
+                    <li class="list_item"><a href="~/OtherPages/AboutUs">О нас</a></li>
+                </ul>
+            </nav>
+            <div class="header_form">
+
+                <a class="logo_hiden" href="/">
+                    <img src="~/img/logo.svg" alt="TRUprogram">
+                </a>
+                @if (Context.Session.Keys.Contains("user"))
+                {
+                    <div class="lk_mini">
+
+                        <div class="user">
+
+                            <a class="n" href="~/User/Profile">
+                                @Context.Session.GetString("user")
+                            </a>
+                            <a class="v" href="~/User/Logout">Выйти</a>
+                        </div>
+
+                        <a href="~/User/Profile">
+                            <img width="50px" src="@Context.Session.GetString("userAvatar")" alt="avatar">
+                        </a>
+
+                    </div>
+                }
+                else
+                {
+                    <a href="~/User/Login"><input class="log_btn" type="button" value="Вход"></a>
+                }
+            </div>
+        </div>
+    </header>
+
+    <div class="wraper">@RenderBody()</div>
+
+    <footer class="footer">
+        <div class="foot_wraper">
+            <div class="copyright">© TRUprogram @DateTime.Now.Year</div>
+            <div class="social">
+                <a href="https://www.facebook.com"><img width="25rep" src="~/img/facebook.svg" alt="facebook"></a>
+                <a href=""><img width="25rep" src="~/img/TRUtwitter.svg" alt="twitter"></a>
+                <a href="https://vk.com"><img width="25rep" src="~/img/VK.svg" alt="VK"></a>
+                <a href="https://www.instagram.com"><img width="30rep" src="~/img/instagram.svg" alt="instagram"></a>
+                <a href="https://ok.ru"><img width="25rep" src="~/img/ok.svg" alt="ok"></a>
+                <a href="https://www.youtube.com"><img width="25rep" src="~/img/youtube.svg" alt="youtube"></a>
+            </div>
+            <div class="contacts">
+                <a href="mailto:official@truprogram.space">official@truprogram.space</a>
+                <a href="tel:+78005553535">88005553535</a>
+            </div>
+        </div>
+    </footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    @if (ViewBag.js != null)
+    {
+        <script src="~/js/@ViewBag.js"></script>
+    }
+</body>
+</html>

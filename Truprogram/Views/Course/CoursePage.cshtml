@@ -1,0 +1,70 @@
+﻿@using Microsoft.AspNetCore.Http
+@model Truprogram.Models.Course
+
+@{
+    ViewBag.Title = "program";
+    ViewBag.css = "cours.css";
+    ViewBag.js = "cours.js";
+}
+<div class="zag">@Model.Name</div>
+<div class="ov">
+    <div class="logo_cr">
+        <img width="250px" src="@Model.Logo">
+    </div>
+    <div class="text_ov">
+        <div class="sp">
+            <div class="sp1">Выступающий</div>
+            <div class="sp2">@Model.Author</div>
+        </div>
+
+        <div class="da">
+            <div class="da1">Время проведения</div>
+
+            <div class="da2">
+                @Model.DateTimeStart
+                @if ((int)ViewBag.daysLeft > 0)
+                {
+                <div class="da2"> Дней до начала: @ViewBag.daysLeft</div>
+                }
+                else
+                {
+                    <div class="da2">Данный курс уже закончен</div>
+                }
+            </div>
+        </div>
+        <div class="lo1">Место проведения</div>
+        <div class="lo2">
+            <a target="_blank" href="@Model.UrlCourse">@Model.UrlCourse</a>
+        </div>
+            @if (Context.Session.GetInt32("userVerification") == 1)
+            {
+                <form>
+                    <input type="hidden" name="courseId" value="@Model.Id"/>
+                    @if (Context.Session.GetInt32("userRole") == 0)
+                    {
+                        if (!Model.Learners.Contains((int) Context.Session.GetInt32("userId")))
+                        {
+                            <input type="hidden" name="zap" value="zap">
+                            <button id="bt" type="submit">Записаться</button>
+                        }
+                        else
+                        {
+                            <input type="hidden" name="zap" value="otp">
+                            <button id="bt" type="submit">Отписаться</button>
+                        }
+                    }
+                    else if (Context.Session.GetInt32("userRole") == 1 && Model.AuthorId == Context.Session.GetInt32("userId"))
+                    {
+                        <input type="hidden" name="zap" value="del">
+                        <button id="bt" type="submit">Удалить</button>
+                    }
+                </form>
+                <div class="msg"></div>
+            }
+        </div>
+    </div>
+<div class="text">
+    @Model.Description
+</div>
+
+<div class="da2"> Возможность комментировать курсы временно недоступна!</div>

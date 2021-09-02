@@ -1,0 +1,130 @@
+.wraper {
+    max-width: 1500px;
+    margin: 0 auto
+}
+
+#back.show {
+    opacity: 1;
+    visibility: visible
+}
+
+#back {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 50px;
+    background: linear-gradient(to top, rgba(80,102,123,0) 10%, rgba(80,102,123,0.1), rgba(80,102,123,0) 90%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden
+}
+
+#back:hover {
+    cursor: pointer;
+    background: linear-gradient(to top, rgba(80,102,123,0) 10%, rgba(80,102,123,0.3), rgba(80,102,123,0) 90%);
+    transition: .3s
+}
+
+@media screen and (max-width:800px) {
+    #back:hover {
+        background: unset;
+        background-color: rgba(80,102,123,0.3)
+    }
+}
+
+@media screen and (max-width:800px) {
+    #back {
+        background: unset;
+        background-color: rgba(80,102,123,0.1);
+        height: 50px;
+        width: 100%;
+        bottom: 0;
+        top: unset
+    }
+}
+
+.xz_chto {
+    font-size: 1.4em;
+    color: #50667B
+}
+
+.menu {
+    margin: 0 60px;
+    margin-top: 40px;
+    font-size: 1.2em;
+    display: flex;
+    align-items: space-between;
+    flex-direction: row;
+    justify-content: space-between
+}
+
+.cont {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 330px)
+}
+
+.cours {
+    padding: 40px;
+    margin: 40px 60px;
+    font-size: 1.2em;
+    border: 4px #F4F5FA solid;
+    display: flex;
+    align-items: space-between;
+    flex-direction: row
+}
+
+@media screen and (max-width:800px) {
+    .cours {
+        border: none;
+        margin: 0;
+        padding: 10px;
+        margin-top: 20px;
+        font-size: 1.1em
+    }
+}
+
+@media screen and (max-width:1024px) {
+    .cours img {
+        display: none
+    }
+}
+
+.text {
+    padding-top: 20px;
+    text-indent: 50px;
+    line-height: 150%;
+    text-align: justify;
+    max-height: 160px;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden
+}
+
+@media screen and (max-width:1024px) {
+    .text {
+        padding-top: 10px
+    }
+}
+
+.zag {
+    font-size: 1.5em
+}
+
+.description {
+    margin-left: 50px
+}
+
+@media screen and (max-width:800px) {
+    .description {
+        margin-left: 0
+    }
+}
+
+.description a {
+    color: #50667B
+}

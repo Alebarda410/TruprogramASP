@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Truprogram.Models.Course>
+@{
+    ViewBag.Title = "program";
+    ViewBag.css = "courses_st.css";
+    ViewBag.js = "scroll_courses.js";
+    Layout = "_LayoutCourses";
+}
+
+<div class="cont">
+    <div class="menu">
+        <div class="xz_chto">@ViewBag.info</div>
+    </div>
+    @foreach (var course in Model)
+    {
+        <div class="cours">
+            <a href="~/Course/CoursePage/@course.Id"><img width="150px" src="@course.Logo" alt="logo"></a>
+            <div class="description">
+                <a href="~/Course/CoursePage/@course.Id" class="zag">@course.Name</a>
+                <div class="text">
+                    @course.Description
+                    <a href="~/Course/CoursePage/@course.Id">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
