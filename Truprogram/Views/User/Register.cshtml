@@ -26,7 +26,7 @@
             <img id="d" src="~/img/back_mini.svg" alt="back" width="40px">
         </div>
     </a>
-    <form asp-action="Register" asp-controller="User">
+    <form method="POST" asp-action="Register" asp-controller="User">
 
         <label>Ваше имя</label>
         <input asp-for="Name" oninput="nameFun(this)" type="text" placeholder="Например Иван" />
@@ -64,7 +64,21 @@
         <script type="text/javascript" src="~/js/reg.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
-
+        <script type="text/javascript">
+            $('form').submit(function (event) {
+                event.preventDefault();
+                $.post('/User/Register', $('form').serialize(),
+                    function (data) {
+                        if (data == '1') {
+                            document.location.href = "/OtherPages/Index";
+                        } else {
+                            $('.msg').html(data);
+                            $('form').css('padding-bottom', '33px');
+                        }
+                    }
+                );
+            });
+        </script>
     </form>
 </body>
 
