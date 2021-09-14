@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -48,9 +47,5 @@ namespace Truprogram.Models
         /// Дата старта курса
         /// </summary>
         public DateTime DateTimeStart { get; set; }
-        /// <summary>
-        /// Список обучающихся на курсе
-        /// </summary>
-        public List<int> Learners { get; set; }
     }
 }

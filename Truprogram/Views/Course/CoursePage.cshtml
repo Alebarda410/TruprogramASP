@@ -36,31 +36,31 @@
         <div class="lo2">
             <a target="_blank" href="@Model.UrlCourse">@Model.UrlCourse</a>
         </div>
-            @if (Context.Session.GetInt32("userVerification") == 1)
-            {
-                <form>
-                    <input type="hidden" name="courseId" value="@Model.Id"/>
-                    @if (Context.Session.GetInt32("userRole") == 0)
+        @if (Context.Session.GetInt32("userVerification") == 1)
+        {
+            <form>
+                <input type="hidden" name="courseId" value="@Model.Id"/>
+                @if (Context.Session.GetInt32("userRole") == 0)
+                {
+                    if (ViewBag.UserCourse == null)
                     {
-                        if (!Model.Learners.Contains((int) Context.Session.GetInt32("userId")))
-                        {
-                            <input type="hidden" name="zap" value="zap">
-                            <button id="bt" type="submit">Записаться</button>
-                        }
-                        else
-                        {
-                            <input type="hidden" name="zap" value="otp">
-                            <button id="bt" type="submit">Отписаться</button>
-                        }
+                        <input type="hidden" name="zap" value="zap">
+                        <button id="bt" type="submit">Записаться</button>
                     }
-                    else if (Context.Session.GetInt32("userRole") == 1 && Model.AuthorId == Context.Session.GetInt32("userId"))
+                    else
                     {
-                        <input type="hidden" name="zap" value="del">
-                        <button id="bt" type="submit">Удалить</button>
+                        <input type="hidden" name="zap" value="otp">
+                        <button id="bt" type="submit">Отписаться</button>  
                     }
-                </form>
-                <div class="msg"></div>
-            }
+                }
+                else if (Context.Session.GetInt32("userRole") == 1 && Model.AuthorId == Context.Session.GetInt32("userId"))
+                {
+                    <input type="hidden" name="zap" value="del">
+                    <button id="bt" type="submit">Удалить</button>
+                }
+            </form>
+            <div class="msg"></div>
+        }
         </div>
     </div>
 <div class="text">

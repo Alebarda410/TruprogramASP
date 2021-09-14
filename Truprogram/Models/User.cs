@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Truprogram.Models
 {
@@ -41,10 +39,6 @@ namespace Truprogram.Models
         /// Роль пользователя
         /// </summary>
         public byte Role { get; set; }
-        /// <summary>
-        /// Список курсов на которые пользователь записан или является автором
-        /// </summary>
-        public List<int> UserCourses { get; set; }
         /// <summary>
         /// Показывает подтвердил ли пользователь свою почту
         /// </summary>

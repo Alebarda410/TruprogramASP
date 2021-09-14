@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,8 +37,21 @@ namespace Truprogram.Controllers
             if (user == null)
                 return LocalRedirect("/");
 
-            var courses = _db.Courses.Where(course => user.UserCourses.Contains(course.Id));
+            IQueryable<Course> courses = null;
+            if (user.Role == 0)
+            {
+                var coursesIds =
+                    from userCourse in _db.UsersCourses
+                    where userCourse.UserId == user.Id
+                    select userCourse.CourseId;
 
+                courses = _db.Courses.Where(course => coursesIds.Contains(course.Id));
+            }
+
+            if (user.Role == 1)
+            {
+                courses = _db.Courses.Where(course => course.AuthorId==user.Id);
+            }
             return View(courses);
         }
 
@@ -74,50 +86,49 @@ namespace Truprogram.Controllers
 
             var userId = (int)HttpContext.Session.GetInt32("userId");
             var user = await _db.Users.FindAsync(userId);
-            var course = await _db.Courses.FindAsync(courseId);
+            var course = await _db.Courses.FindAsync(resultId);
+            var userCourse = _db.UsersCourses.FirstOrDefault(uCourse =>
+                uCourse.CourseId == course.Id && uCourse.UserId == userId);
+
+            ViewBag.UserCourse = userCourse;
 
             if (user == null || course == null)
+            {
                 return "Данные не найдены";
-
+            }
             if (zap.Equals("zap") && user.Role == 0)
             {
-                if (user.UserCourses.Contains(resultId) || course.Learners.Contains(userId))
+                if (userCourse != null)
+                {
                     return "Вы уже записаны на этот курс!";
+                }
 
-                user.UserCourses.Add(resultId);
-                course.Learners.Add(userId);
-
+                _db.UsersCourses.Add(new UsersCourses { CourseId = course.Id, UserId = userId });
                 await _db.SaveChangesAsync();
                 return "zap";
             }
             if (zap.Equals("otp") && user.Role == 0)
             {
-                if (!user.UserCourses.Contains(resultId) || !course.Learners.Contains(userId))
+                if (userCourse == null)
+                {
                     return "Вы не можете отписаться от этого курса!";
+                }
 
-                user.UserCourses.Remove(resultId);
-                course.Learners.Remove(userId);
-
+                _db.UsersCourses.Remove(userCourse);
                 await _db.SaveChangesAsync();
                 return "otp";
             }
             if (zap.Equals("del") && user.Role == 1)
             {
-                user.UserCourses.Remove(resultId);
-
-                //при наличии вторичного ключа этого можно избежать путем каскадного удаления
-
-                Parallel.ForEach(course.Learners,
-                    new ParallelOptions { MaxDegreeOfParallelism = 10 },
-                    async i =>
-                    {
-                        var u = await _db.Users.FindAsync(i);
-                        u.UserCourses.Remove(resultId);
-                    });
+                if (userCourse == null)
+                {
+                    return "Вы не можете удалить этот курс!";
+                }
 
                 _db.Courses.Remove(course);
-                System.IO.File.Delete(_appEnvironment.WebRootPath + course.Logo);
                 await _db.SaveChangesAsync();
+
+                System.IO.File.Delete(_appEnvironment.WebRootPath + course.Logo);
                 return "del";
             }
             return "Ошибка!";
@@ -169,20 +180,17 @@ namespace Truprogram.Controllers
             var course = new Course()
             {
                 Name = name,
-                AuthorId = (int)HttpContext.Session.GetInt32("userId"),
+                AuthorId = user.Id,
                 Author = author,
                 DateTimePost = DateTime.Now,
                 DateTimeStart = dateTimeStart,
                 Description = description,
                 UrlCourse = urlCourse,
-                Logo = path,
-                Learners = new List<int>()
+                Logo = path
             };
             await _db.Courses.AddAsync(course);
             await _db.SaveChangesAsync();
-
-            user.UserCourses.Add(course.Id);
-            await _db.SaveChangesAsync();
+            
             await using var fs = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create);
             await logo.CopyToAsync(fs);
             return "Курс успешно добавлен!";

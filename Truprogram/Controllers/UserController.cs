@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -171,10 +170,10 @@ namespace Truprogram.Controllers
         [AcceptVerbs("Get", "Post")]
         public IActionResult CheckEmail(string email)
         {
-            return Json(!_db.Users.Any(u=>u.Email == email));
+            return Json(!_db.Users.Any(u => u.Email == email));
         }
         [HttpPost]
-        public async Task<string> Register(ISendInfo service, UserValidation uv)
+        public async Task<string> Register(EmailService service, UserValidation uv)
         {
             if (HttpContext.Session.Keys.Contains("user"))
                 return "Вы уже авторизированы!";
@@ -190,8 +189,7 @@ namespace Truprogram.Controllers
                 Password = BCrypt.Net.BCrypt.HashPassword(uv.Password),
                 Role = uv.Role,
                 Verification = false,
-                TimeRegistration = DateTime.Now,
-                UserCourses = new List<int>()
+                TimeRegistration = DateTime.Now
             };
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
@@ -263,32 +261,18 @@ namespace Truprogram.Controllers
             if (user == null)
                 return LocalRedirect("/");
 
-            //при наличии вторичного ключа этого можно избежать путем каскадного удаления
             if (user.Role == 1)
             {
                 var courses = _db.Courses.Where(course => course.AuthorId == user.Id);
                 if (courses.Any())
                 {
-                    Parallel.ForEach(courses, new ParallelOptions { MaxDegreeOfParallelism = 10 }, async course =>
-                    {
-                        foreach (var id in course.Learners)
-                        {
-                            var u = await _db.Users.FindAsync(id);
-                            u.UserCourses.Remove(course.Id);
-                        }
-                        System.IO.File.Delete(_appEnvironment.WebRootPath + course.Logo);
-                    });
                     _db.Courses.RemoveRange(courses);
                 }
             }
 
-            if (user.Role == 0)
-            {
-                Parallel.ForEach(_db.Courses, new ParallelOptions() { MaxDegreeOfParallelism = 10 }, course =>
-                {
-                    course.Learners.Remove(user.Id);
-                });
-            }
+            var usersCourses = _db.UsersCourses.Where(usCourses => usCourses.UserId == user.Id);
+            _db.UsersCourses.RemoveRange(usersCourses);
+
             System.IO.File.Delete(_appEnvironment.WebRootPath + user.Avatar);
             _db.Users.Remove(user);
             await _db.SaveChangesAsync();
