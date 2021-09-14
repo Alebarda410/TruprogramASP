@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Truprogram.Models;
 using Truprogram.Services;
 
@@ -27,13 +28,15 @@ namespace Truprogram
             services.AddDistributedMemoryCache();
             services.AddSession();
 
-            services.AddSingleton<ISendInfo, EmailService>();
+            services.AddSingleton<EmailService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
-            app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

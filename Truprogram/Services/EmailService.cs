@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Truprogram.Services
 {
-    public class EmailService : ISendInfo
+    public class EmailService
     {
         public async Task Send(string email, string subject, string message)
         {
