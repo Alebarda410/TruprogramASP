@@ -19,9 +19,8 @@ namespace Truprogram
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
             services.AddDbContext<DataBaseContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DataBaseContext")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllersWithViews();
 
@@ -37,8 +36,7 @@ namespace Truprogram
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
+            app.UseHsts();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseSession();

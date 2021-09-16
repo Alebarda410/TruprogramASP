@@ -5,14 +5,12 @@
 
 # User-specific files
 appsettings.json
-DataBaseContext.cs
 
 *.rsuser
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
-wwwroot/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
