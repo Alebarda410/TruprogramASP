@@ -38,6 +38,7 @@ namespace Truprogram.Controllers
                 return LocalRedirect("/");
 
             IQueryable<Course> courses = null;
+            // если пользователь слушатель
             if (user.Role == 0)
             {
                 var coursesIds =
@@ -47,7 +48,7 @@ namespace Truprogram.Controllers
 
                 courses = _db.Courses.Where(course => coursesIds.Contains(course.Id));
             }
-
+            // если пользователь лектор
             if (user.Role == 1)
             {
                 courses = _db.Courses.Where(course => course.AuthorId==user.Id);
@@ -96,6 +97,7 @@ namespace Truprogram.Controllers
             {
                 return "Данные не найдены";
             }
+            // если слушатель хочет записаться на курс
             if (zap.Equals("zap") && user.Role == 0)
             {
                 if (userCourse != null)
@@ -107,6 +109,7 @@ namespace Truprogram.Controllers
                 await _db.SaveChangesAsync();
                 return "zap";
             }
+            // если слушатель хочет отписаться от курса
             if (zap.Equals("otp") && user.Role == 0)
             {
                 if (userCourse == null)
@@ -118,6 +121,7 @@ namespace Truprogram.Controllers
                 await _db.SaveChangesAsync();
                 return "otp";
             }
+            // если лектор хочет удалить курс
             if (zap.Equals("del") && user.Role == 1)
             {
                 if (userCourse == null)
@@ -125,7 +129,11 @@ namespace Truprogram.Controllers
                     return "Вы не можете удалить этот курс!";
                 }
 
+                var usersCourses = _db.UsersCourses.Where(usCourses => usCourses.CourseId == course.Id);
+                _db.UsersCourses.RemoveRange(usersCourses);
+
                 _db.Courses.Remove(course);
+
                 await _db.SaveChangesAsync();
 
                 System.IO.File.Delete(_appEnvironment.WebRootPath + course.Logo);

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Linq;
@@ -41,7 +40,7 @@ namespace Truprogram.Controllers
 
             var user = _db.Users
                 .Find(HttpContext.Session.GetInt32("userId"));
-            var changes = 0;
+            var changes = false;
 
             if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
                 return "Подтвердите пароль!";
@@ -54,7 +53,7 @@ namespace Truprogram.Controllers
                     return "Имя не соответствует требованиям!";
 
                 user.Name = name;
-                changes = 1;
+                changes = true;
             }
 
             if (email != null)
@@ -67,7 +66,7 @@ namespace Truprogram.Controllers
                     return "Не корректный Email!";
 
                 user.Email = email;
-                changes = 1;
+                changes = true;
             }
 
             if (new_password != null)
@@ -82,7 +81,7 @@ namespace Truprogram.Controllers
                     return "Пароль не соответствует требованиям!";
 
                 user.Password = BCrypt.Net.BCrypt.HashPassword(new_password);
-                changes = 1;
+                changes = true;
             }
 
             if (avatar != null)
@@ -103,10 +102,13 @@ namespace Truprogram.Controllers
                 using var fs = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create);
                 avatar.CopyTo(fs);
                 user.Avatar = path;
-                changes = 1;
+                changes = true;
             }
 
-            if (changes != 1) return "Данные не менялись!";
+            if (!changes)
+            {
+                return "Данные не менялись!";
+            }
             _db.SaveChanges();
             HttpContext.Session.SetString("userAvatar", user.Avatar);
             HttpContext.Session.SetString("user", user.Name);
@@ -192,14 +194,8 @@ namespace Truprogram.Controllers
                 TimeRegistration = DateTime.Now
             };
             _db.Users.Add(user);
-            await _db.SaveChangesAsync();
+            var result =_db.SaveChangesAsync();
 
-            HttpContext.Session.SetInt32("userId", user.Id);
-            HttpContext.Session.SetInt32("userRole", user.Role);
-            HttpContext.Session.SetString("user", user.Name);
-            HttpContext.Session.SetString("userAvatar", user.Avatar);
-            HttpContext.Session.SetInt32("userVerification", Convert.ToInt32(user.Verification));
-            HttpContext.Session.Remove("BackUrl");
             var token = Encoding.UTF8.GetBytes(uv.Email);
 
             var message = "Для подтверждения регистрации пройдите по <a href='"
@@ -208,11 +204,20 @@ namespace Truprogram.Controllers
                           + "'>ссылке</a>.";
             await service.Send(uv.Email, "Подтверждение регистрации", message);
 
+            await result;
+            HttpContext.Session.SetInt32("userId", user.Id);
+            HttpContext.Session.SetInt32("userRole", user.Role);
+            HttpContext.Session.SetString("user", user.Name);
+            HttpContext.Session.SetString("userAvatar", user.Avatar);
+            HttpContext.Session.SetInt32("userVerification", Convert.ToInt32(user.Verification));
+            HttpContext.Session.Remove("BackUrl");
+
             return "1";
         }
 
         public IActionResult Activation(string token)
         {
+            // проверка валидности токена
             if (token == null || !token.Contains("-"))
                 return LocalRedirect("/");
 
@@ -226,7 +231,7 @@ namespace Truprogram.Controllers
                 return LocalRedirect("/");
 
             user.Verification = true;
-            _db.SaveChanges();
+            _db.SaveChangesAsync();
 
             HttpContext.Session.SetInt32("userId", user.Id);
             HttpContext.Session.SetInt32("userRole", user.Role);
@@ -261,21 +266,28 @@ namespace Truprogram.Controllers
             if (user == null)
                 return LocalRedirect("/");
 
+            // если пользователь лектор
             if (user.Role == 1)
             {
                 var courses = _db.Courses.Where(course => course.AuthorId == user.Id);
+                // если есть созданные курсы, то удаляем их
                 if (courses.Any())
                 {
                     _db.Courses.RemoveRange(courses);
                 }
             }
-
-            var usersCourses = _db.UsersCourses.Where(usCourses => usCourses.UserId == user.Id);
-            _db.UsersCourses.RemoveRange(usersCourses);
+            // если пользователь слушатель
+            else if (user.Role == 0)
+            {
+                // удаляем связь пользователя с курсами
+                var usersCourses = _db.UsersCourses.Where(usCourses => usCourses.UserId == user.Id);
+                _db.UsersCourses.RemoveRange(usersCourses);
+            }
 
             System.IO.File.Delete(_appEnvironment.WebRootPath + user.Avatar);
             _db.Users.Remove(user);
-            await _db.SaveChangesAsync();
+
+            var result = _db.SaveChangesAsync();
 
             foreach (var key in HttpContext.Session.Keys)
             {
@@ -283,6 +295,7 @@ namespace Truprogram.Controllers
             }
 
             Response.Cookies.Delete(".AspNetCore.Session");
+            await result;
             return LocalRedirect("/");
         }
     }
