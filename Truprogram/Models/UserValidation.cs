@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Truprogram.Models
 {
@@ -11,7 +11,7 @@ namespace Truprogram.Models
 
         [Required(ErrorMessage = "Не указан email")]
         [EmailAddress(ErrorMessage = "Некорректный email")]
-        [Remote(action: "CheckEmail", controller: "User", ErrorMessage = "Email уже используется")]
+        [Remote("CheckEmail", "User", ErrorMessage = "Email уже используется")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Не указан пароль")]
@@ -24,7 +24,7 @@ namespace Truprogram.Models
         public string PasswordConfirm { get; set; }
 
         [Required(ErrorMessage = "Не указана роль")]
-        [Range(0, 1, ErrorMessage = "Недопустимая роль")]
-        public byte Role { get; set; }
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Недопустимая роль")]
+        public string Role { get; set; }
     }
 }

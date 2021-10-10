@@ -22,9 +22,9 @@
 
             <div class="da2">
                 @Model.DateTimeStart
-                @if ((int)ViewBag.daysLeft > 0)
+                @if ((int) ViewBag.daysLeft > 0)
                 {
-                <div class="da2"> Дней до начала: @ViewBag.daysLeft</div>
+                    <div class="da2"> Дней до начала: @ViewBag.daysLeft</div>
                 }
                 else
                 {
@@ -36,11 +36,11 @@
         <div class="lo2">
             <a target="_blank" href="@Model.UrlCourse">@Model.UrlCourse</a>
         </div>
-        @if (Context.Session.GetInt32("userVerification") == 1)
+        @if (bool.Parse(ViewBag.verefication) == true)
         {
             <form>
                 <input type="hidden" name="courseId" value="@Model.Id"/>
-                @if (Context.Session.GetInt32("userRole") == 0)
+                @if (ViewBag.role == "Слушатель")
                 {
                     if (ViewBag.UserCourse == null)
                     {
@@ -50,10 +50,10 @@
                     else
                     {
                         <input type="hidden" name="zap" value="otp">
-                        <button id="bt" type="submit">Отписаться</button>  
+                        <button id="bt" type="submit">Отписаться</button>
                     }
                 }
-                else if (Context.Session.GetInt32("userRole") == 1 && Model.AuthorId == Context.Session.GetInt32("userId"))
+                else if (ViewBag.role == "Лектор" && Model.AuthorId == ViewBag.author)
                 {
                     <input type="hidden" name="zap" value="del">
                     <button id="bt" type="submit">Удалить</button>
@@ -61,8 +61,8 @@
             </form>
             <div class="msg"></div>
         }
-        </div>
     </div>
+</div>
 <div class="text">
     @Model.Description
 </div>

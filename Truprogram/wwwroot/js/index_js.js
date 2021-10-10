@@ -7,6 +7,7 @@ function nextSlide() {
     currentSlide = (currentSlide + 1) % slides.length;
     slides[currentSlide].className = 'slide showing';
 }
+
 $(window).resize(function () {
     $('.slides').height($('.slide').height());
 });

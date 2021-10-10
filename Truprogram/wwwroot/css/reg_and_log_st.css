@@ -8,7 +8,7 @@ body {
     background-color: #F4F5FA
 }
 
-@media screen and (max-height:560px) {
+@media screen and (max-height: 560px) {
     body {
         height: 100%
     }
@@ -66,6 +66,7 @@ button:hover {
 .msg {
     color: #F44F2B;
 }
+
 .field-validation-error {
     color: #B22222;
     margin-bottom: 10px;
@@ -77,13 +78,13 @@ body > a > .back {
     left: 0;
     height: 100%;
     width: 50px;
-    background-color: rgba(80,102,123,0.1);
+    background-color: rgba(80, 102, 123, 0.1);
     display: flex;
     align-items: center;
     justify-content: center
 }
 
-@media screen and (max-width:500px) {
+@media screen and (max-width: 500px) {
     body > a > .back > #o {
         display: none
     }
@@ -93,18 +94,18 @@ body > a > .back > #d {
     display: none
 }
 
-@media screen and (max-width:500px) {
+@media screen and (max-width: 500px) {
     body > a > .back > #d {
         display: inline
     }
 }
 
 body > a > .back:hover {
-    background-color: rgba(80,102,123,0.3);
+    background-color: rgba(80, 102, 123, 0.3);
     transition: .3s
 }
 
-@media screen and (max-width:500px) {
+@media screen and (max-width: 500px) {
     body > a > .back {
         height: 50px
     }
@@ -118,5 +119,5 @@ body > a > .back:hover {
     color: #333;
     font-size: .9em;
     background: #fff;
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.2)
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2)
 }

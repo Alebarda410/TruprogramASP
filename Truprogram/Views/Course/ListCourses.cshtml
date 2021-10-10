@@ -13,7 +13,9 @@
     @foreach (var course in Model)
     {
         <div class="cours">
-            <a href="~/Course/CoursePage/@course.Id"><img width="150px" src="@course.Logo" alt="logo"></a>
+            <a href="~/Course/CoursePage/@course.Id">
+                <img width="150px" src="@course.Logo" alt="logo">
+            </a>
             <div class="description">
                 <a href="~/Course/CoursePage/@course.Id" class="zag">@course.Name</a>
                 <div class="text">

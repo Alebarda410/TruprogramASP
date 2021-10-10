@@ -9,13 +9,13 @@
     <form id="tipo_id">
 
         <label>Название курса</label>
-        <input maxlength="50" type="text" name="name" placeholder="HTML язык прораммирования" required>
+        <input maxlength="50" type="text" name="name" required>
 
         <label>Автор курса</label>
-        <input maxlength="50" type="text" name="author" placeholder="@Context.Session.GetString("name")" required>
+        <input maxlength="50" type="text" name="author" required>
 
         <label>Логотип курса (лучше квадратный)</label>
-        <input type="hidden" name="MAX_FILE_SIZE" value="5242880‬" />
+        <input type="hidden" name="MAX_FILE_SIZE" value="5242880"/>
         <input type="file" name="logo" accept="image/*" required>
 
         <label>Дата и время курса</label>
@@ -23,10 +23,10 @@
 
         <label>Подробное описание курса</label>
         <textarea placeholder="Максимум 20000 символов минимум 300" cols="30" rows="10" form="tipo_id" required maxlength="20000" name="description"></textarea>
-        
+
         <label>Ссылка на ваш курс</label>
         <input maxlength="200" type="text" name="urlCourse" placeholder="Web адрес" required>
-        
+
         <label>Для добавления курса введите текущий пароль</label>
         <input maxlength="50" type="password" name="password" placeholder="Введите ваш пароль" required readonly onfocus="this.removeAttribute('readonly')">
 

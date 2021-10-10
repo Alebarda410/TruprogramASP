@@ -4,7 +4,7 @@
     margin-top: 50px
 }
 
-@media screen and (max-width:1024px) {
+@media screen and (max-width: 1024px) {
     .wraper {
         margin: 0
     }
@@ -17,7 +17,7 @@
     align-items: center
 }
 
-@media screen and (max-width:1400px) {
+@media screen and (max-width: 1400px) {
     .top_cont {
         margin: 10px;
         flex-direction: column-reverse
@@ -29,7 +29,7 @@
     height: 533px
 }
 
-@media screen and (max-width:1400px) {
+@media screen and (max-width: 1400px) {
     .slides {
         width: 100%;
         max-height: 533px;
@@ -69,7 +69,7 @@ blockquote {
     border-left: 8px solid #E1E6EB;
     position: relative;
     background: #fcfcfc;
-    font-family: 'Lato',sans-serif;
+    font-family: 'Lato', sans-serif;
     font-weight: 300
 }
 

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Truprogram.Services;
 
 namespace Truprogram.Controllers
@@ -10,15 +10,18 @@ namespace Truprogram.Controllers
         {
             return View();
         }
+
         public IActionResult AboutUs()
         {
             return View();
         }
+
         [HttpGet]
         public IActionResult Contact()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<string> Contact(EmailService service, string name, string email, string text)
         {

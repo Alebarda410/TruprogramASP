@@ -6,13 +6,11 @@ $('form').submit(function (event) {
                 $('#bt').html('Отписаться');
                 $('input[value="zap"]').attr('value', 'otp');
                 $('.msg').html("Вы успешно записались на этот курс!");
-            }
-            else if (data === 'otp') {
+            } else if (data === 'otp') {
                 $('#bt').html('Записаться');
                 $('input[value="otp"]').attr('value', 'zap');
                 $('.msg').html("Вы успешно отписались от этого курса!");
-            }
-            else if (data === 'del') {
+            } else if (data === 'del') {
                 history.back();
             } else {
                 $('.msg').html(data);

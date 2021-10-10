@@ -9,7 +9,7 @@
     align-items: flex-start
 }
 
-@media screen and (max-width:1024px) {
+@media screen and (max-width: 1024px) {
     .cont {
         flex-direction: column-reverse;
         align-items: center
@@ -25,14 +25,14 @@ form {
     border: 4px #F4F5FA solid
 }
 
-@media screen and (max-width:1024px) {
+@media screen and (max-width: 1024px) {
     form {
         border: none;
         margin: 0
     }
 }
 
-@media screen and (max-width:450px) {
+@media screen and (max-width: 450px) {
     form {
         padding: 10px;
         margin-top: 20px
@@ -76,7 +76,7 @@ button:hover {
     margin: 80px 0
 }
 
-@media screen and (max-width:1024px) {
+@media screen and (max-width: 1024px) {
     .next_courses {
         margin-top: 40px;
         margin-bottom: 0

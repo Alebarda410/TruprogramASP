@@ -22,7 +22,7 @@
             <input oninput="emailFun(this)" maxlength="50" type="email" name="email" placeholder="Введите новый email" readonly onfocus="this.removeAttribute('readonly')">
 
             <label>Изменить аватар</label>
-            <input type="hidden" name="MAX_FILE_SIZE" value="5242880‬" />
+            <input type="hidden" name="MAX_FILE_SIZE" value="5242880‬"/>
             <input type="file" name="avatar" accept="image/*">
 
             <label>Для изменения данных введите текущий пароль</label>
@@ -46,16 +46,20 @@
         </form>
 
         <div class="next_courses">
-            @if (@Model.Role == 1)
+            @if (Model.Role.Name == "Лектор")
             {
                 <p>Вы лектор</p>
-                <a href="~/Course/AddCourse"><button class="left_btn">Новый курс</button></a>
+                <a href="~/Course/AddCourse">
+                    <button class="left_btn">Новый курс</button>
+                </a>
             }
-            else
+            else if (Model.Role.Name == "Слушатель")
             {
                 <p>Вы слушатель</p>
             }
-            <a href="~/Course/ListCourses?myCourses=true"><button class="left_btn">Мои курсы</button></a>
+            <a href="~/Course/MyListCourses">
+                <button class="left_btn">Мои курсы</button>
+            </a>
             <button onclick="del()" class="left_btn">Удалить аккаунт</button>
         </div>
     }

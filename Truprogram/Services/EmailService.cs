@@ -1,6 +1,7 @@
-﻿using MailKit.Net.Smtp;
+﻿using System.Threading.Tasks;
+using MailKit.Net.Smtp;
 using MimeKit;
-using System.Threading.Tasks;
+using MimeKit.Text;
 
 namespace Truprogram.Services
 {
@@ -13,7 +14,7 @@ namespace Truprogram.Services
             emailMessage.From.Add(new MailboxAddress("Администрация сайта", "popa0101@yandex.ru"));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            emailMessage.Body = new TextPart(TextFormat.Html)
             {
                 Text = message
             };

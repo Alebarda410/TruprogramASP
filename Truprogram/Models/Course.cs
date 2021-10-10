@@ -5,46 +5,54 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Truprogram.Models
 {
     /// <summary>
-    /// Описывает курс
+    ///     Описывает курс
     /// </summary>
     [Table("Courses")]
     public class Course
     {
         /// <summary>
-        /// Ид курса
+        ///     Ид курса
         /// </summary>
         [Key]
         public int Id { get; set; }
+
         /// <summary>
-        /// Название курса
+        ///     Название курса
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
-        /// Автор курса
+        ///     Автор курса
         /// </summary>
         public string Author { get; set; }
+
         /// <summary>
-        /// Ид автора курса
+        ///     Ид автора курса
         /// </summary>
         public int AuthorId { get; set; }
+
         /// <summary>
-        /// Логотип курса
+        ///     Логотип курса
         /// </summary>
         public string Logo { get; set; }
+
         /// <summary>
-        /// Описание курса
+        ///     Описание курса
         /// </summary>
         public string Description { get; set; }
+
         /// <summary>
-        /// Ссылка на курс
+        ///     Ссылка на курс
         /// </summary>
         public string UrlCourse { get; set; }
+
         /// <summary>
-        /// Дата создания курса
+        ///     Дата создания курса
         /// </summary>
         public DateTime DateTimePost { get; set; }
+
         /// <summary>
-        /// Дата старта курса
+        ///     Дата старта курса
         /// </summary>
         public DateTime DateTimeStart { get; set; }
     }
